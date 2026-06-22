@@ -10,7 +10,7 @@
     <a href="#deployment">Deployment</a>
   </p>
 
-  <img src="preview.png" alt="KomprezzIn Preview" width="800" style="border-radius: 8px;">
+  <img src="Preview-KomprezzIn.png" alt="KomprezzIn Preview" width="800" style="border-radius: 8px;">
 </div>
 
 ---
@@ -74,4 +74,5 @@ Aplikasi akan terbuka secara otomatis pada peramban web di `http://localhost:850
 Aplikasi ini siap dideploy secara instan pada **Streamlit Community Cloud**:
 - Server Streamlit akan membaca berkas `requirements.txt` untuk menginstal pustaka Python.
 - Server akan membaca berkas `packages.txt` untuk menginstal dependensi tingkat sistem (`ghostscript`) secara otomatis.
+
 
