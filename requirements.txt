@@ -1,0 +1,5 @@
+streamlit==1.57.0
+Pillow
+python-docx
+python-pptx
+pikepdf
