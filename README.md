@@ -17,7 +17,10 @@
 
 KomprezzIn dirancang untuk memecahkan masalah batas ukuran unggahan tugas kuliah pada Learning Management System (LMS) kampus yang membatasi berkas maksimal 2MB. 
 
-**[🔗 Coba Aplikasinya Secara Langsung di Sini](#)** *(Catatan: Ganti tanda # dengan link Streamlit Cloud Anda setelah deploy)*
+<div align="center">
+  <h3><b>Coba aplikasinya:</b></h3>
+  <p><a href="https://komprezzin.streamlit.app/">https://komprezzin.streamlit.app/</a></p>
+</div>
 
 KomprezzIn dapat diakses secara daring kapan saja tanpa perlu instalasi aplikasi atau registrasi akun. Meskipun berjalan di *cloud*, aplikasi ini didesain sepenuhnya *stateless* (tanpa database). Semua berkas diproses secara sementara di dalam memori server dan langsung dihapus setelah sesi berakhir guna menjamin privasi dokumen Anda secara penuh.
 
@@ -74,5 +77,6 @@ Aplikasi akan terbuka secara otomatis pada peramban web di `http://localhost:850
 Aplikasi ini siap dideploy secara instan pada **Streamlit Community Cloud**:
 - Server Streamlit akan membaca berkas `requirements.txt` untuk menginstal pustaka Python.
 - Server akan membaca berkas `packages.txt` untuk menginstal dependensi tingkat sistem (`ghostscript`) secara otomatis.
+
 
 
