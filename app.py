@@ -1103,6 +1103,9 @@ if st.session_state.is_processing:
         # Hapus loading indicator
         loading_placeholder.empty()
 
+        # Paksa rerun agar komponen uploader di atas benar-benar menghilang
+        st.rerun()
+
 # Menampilkan Hasil Kompresi Dinamis
 if st.session_state.has_processed and st.session_state.results:
     total_files = len(st.session_state.results)
