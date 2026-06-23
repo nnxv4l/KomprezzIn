@@ -27,6 +27,14 @@ if "uploader_key" not in st.session_state:
     st.session_state.uploader_key = 0
 if "removed_upload_keys" not in st.session_state:
     st.session_state.removed_upload_keys = []
+if "target_size_label" not in st.session_state:
+    st.session_state.target_size_label = "Standar (< 2MB)"
+
+# Target size mapping
+TARGET_OPTIONS = {
+    "Standar (< 2MB)": 2 * 1024 * 1024,
+    "Ekstrem (< 1MB)": 1 * 1024 * 1024,
+}
 
 
 def get_uploaded_file_key(uploaded_file):
@@ -306,6 +314,25 @@ div.st-key-theme_toggle button p {{
 /* Target & Button Row */
 .target{{display:flex;align-items:center;height:48px;font-size:.85rem;color:var(--muted);font-family:'Space Mono',monospace;white-space:nowrap;margin:0;}}
 .target b{{color:var(--accent);}}
+
+/* Custom Selectbox Styling for Target */
+[data-testid="stSelectbox"] label {{display: none !important;}}
+[data-testid="stSelectbox"] {{margin-top: 6px;}}
+[data-testid="stSelectbox"] > div[data-baseweb="select"] > div {{
+    background: transparent !important;
+    border: 1px dashed var(--line-2) !important;
+    border-radius: 8px !important;
+    min-height: 38px !important;
+    padding-left: 5px !important;
+}}
+[data-testid="stSelectbox"] > div[data-baseweb="select"] > div:hover {{
+    border-color: var(--accent) !important;
+}}
+[data-testid="stSelectbox"] * {{
+    font-family: 'Space Mono', monospace !important;
+    font-size: 0.8rem !important;
+    color: var(--ink) !important;
+}}
 
 /* Native Streamlit Button Styling */
 [data-testid="stHorizontalBlock"]:has(div[class*="st-key-remove_file_"]) {{
@@ -861,10 +888,15 @@ if uploaded_files:
 if uploaded_files:
     col_text, col_cancel, col_gap, col_btn = st.columns([1.5, 0.8, 0.1, 1.4])
     with col_text:
-        st.markdown(
-            """<div class="target">target_output =&nbsp; <b>&lt; 2 MB</b></div>""",
-            unsafe_allow_html=True,
+        selected_target = st.selectbox(
+            "Target Kompresi",
+            options=list(TARGET_OPTIONS.keys()),
+            index=list(TARGET_OPTIONS.keys()).index(st.session_state.target_size_label),
+            label_visibility="collapsed",
+            disabled=st.session_state.is_processing,
+            key="target_selectbox",
         )
+        st.session_state.target_size_label = selected_target
     with col_cancel:
         st.button(
             "Batal &#10005;",
@@ -887,10 +919,15 @@ else:
     st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
     col_text, col_btn = st.columns([2, 1.2])
     with col_text:
-        st.markdown(
-            """<div class="target">target_output =&nbsp; <b>&lt; 2 MB</b></div>""",
-            unsafe_allow_html=True,
+        selected_target = st.selectbox(
+            "Target Kompresi",
+            options=list(TARGET_OPTIONS.keys()),
+            index=list(TARGET_OPTIONS.keys()).index(st.session_state.target_size_label),
+            label_visibility="collapsed",
+            disabled=st.session_state.is_processing,
+            key="target_selectbox_empty",
         )
+        st.session_state.target_size_label = selected_target
     with col_btn:
         st.button(
             "Kompres Sekarang &rarr;",
@@ -986,7 +1023,13 @@ if st.session_state.is_processing:
                     with open(input_path, "wb") as f:
                         f.write(file.getbuffer())
 
-                    future = executor.submit(process_file, temp_dir, file.name, input_path)
+                    future = executor.submit(
+                        process_file,
+                        temp_dir,
+                        file.name,
+                        input_path,
+                        TARGET_OPTIONS[st.session_state.target_size_label],
+                    )
                     futures_to_file[future] = file.name
 
                 for future in concurrent.futures.as_completed(futures_to_file):

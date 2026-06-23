@@ -3,19 +3,17 @@ import os
 from .pdf_engine import compress_pdf
 from .pptx_engine import compress_pptx, compress_docx
 
-TARGET_SIZE = 2 * 1024 * 1024  # 2 MB
-
-def process_file(temp_dir, file_name, input_path):
+def process_file(temp_dir, file_name, input_path, target_size=2097152):
     """
     Memproses satu file:
-    1. Cek apakah ukurannya sudah < 2MB (jika ya, langsung kembalikan)
+    1. Cek apakah ukurannya sudah < target_size (jika ya, langsung kembalikan)
     2. Eksekusi kompresi maksimal 3 iterasi
     3. Mengembalikan hasil kompresi terbaik
     """
     original_size = os.path.getsize(input_path)
 
     # Jika sudah di bawah target, kembalikan langsung
-    if original_size <= TARGET_SIZE:
+    if original_size <= target_size:
         with open(input_path, 'rb') as f:
             best_bytes = f.read()
         return {
@@ -25,7 +23,7 @@ def process_file(temp_dir, file_name, input_path):
             "original_size": original_size,
             "final_size": original_size,
             "status": "ok",
-            "message": "Ukuran sudah di bawah 2MB"
+            "message": "Ukuran sudah di bawah target"
         }
 
     ext = file_name.split('.')[-1].lower()
@@ -61,7 +59,7 @@ def process_file(temp_dir, file_name, input_path):
                     best_path = output_path
                     
                 # Hentikan jika sudah mencapai target
-                if best_size <= TARGET_SIZE:
+                if best_size <= target_size:
                     break
         except ValueError as ve:
              # Biasanya terkait file ber-password
@@ -83,7 +81,7 @@ def process_file(temp_dir, file_name, input_path):
     with open(best_path, 'rb') as f:
         best_bytes = f.read()
 
-    status = "ok" if best_size <= TARGET_SIZE else "warn"
+    status = "ok" if best_size <= target_size else "warn"
     
     return {
         "success": True,
