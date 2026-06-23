@@ -890,37 +890,39 @@ if not st.session_state.has_processed:
         if file_limit_warning:
             st.markdown(file_limit_warning, unsafe_allow_html=True)
 
-    for idx, f in enumerate(uploaded_files):
-        _fname = f.name
-        _ext = _fname.rsplit(".", 1)[-1].upper() if "." in _fname else "FILE"
-        _size_mb = f.size / (1024 * 1024)
-        _size_str = f"{_size_mb:.1f} MB".replace(".", ",")
-        file_key = get_uploaded_file_key(f)
+        for idx, f in enumerate(uploaded_files):
+            _fname = f.name
+            _ext = _fname.rsplit(".", 1)[-1].upper() if "." in _fname else "FILE"
+            _size_mb = f.size / (1024 * 1024)
+            _size_str = f"{_size_mb:.1f} MB".replace(".", ",")
+            file_key = get_uploaded_file_key(f)
 
-        is_over_limit = f.size > 50 * 1024 * 1024  # 50 MB
+            is_over_limit = f.size > 50 * 1024 * 1024  # 50 MB
 
-        if is_over_limit:
-            row_html = f"""<div style="display: flex; align-items: center; justify-content: space-between; background: var(--card-2); border: 1px dashed var(--line); border-radius: 6px; padding: 0.4rem 0.8rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; opacity: 0.6; min-height: 38px; box-sizing: border-box;"><div style="display: flex; align-items: center; gap: 0.5rem; overflow: hidden;"><span style="color: var(--warn); font-weight: 700;">[ {_ext} ]</span><span style="color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: line-through;">{_fname}</span></div><span style="color: var(--warn); flex-shrink: 0;">{_size_str} (Maks 50MB)</span></div>"""
-        else:
-            row_html = f"""<div style="display: flex; align-items: center; justify-content: space-between; background: var(--card-2); border: 1px solid var(--line); border-radius: 6px; padding: 0.4rem 0.8rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; min-height: 38px; box-sizing: border-box;"><div style="display: flex; align-items: center; gap: 0.5rem; overflow: hidden;"><span style="color: var(--accent); font-weight: 700;">[{_ext}]</span><span style="color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{_fname}</span></div><span style="color: var(--muted); flex-shrink: 0;">{_size_str}</span></div>"""
+            if is_over_limit:
+                row_html = f"""<div style="display: flex; align-items: center; justify-content: space-between; background: var(--card-2); border: 1px dashed var(--line); border-radius: 6px; padding: 0.4rem 0.8rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; opacity: 0.6; min-height: 38px; box-sizing: border-box;"><div style="display: flex; align-items: center; gap: 0.5rem; overflow: hidden;"><span style="color: var(--warn); font-weight: 700;">[ {_ext} ]</span><span style="color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: line-through;">{_fname}</span></div><span style="color: var(--warn); flex-shrink: 0;">{_size_str} (Maks 50MB)</span></div>"""
+            else:
+                row_html = f"""<div style="display: flex; align-items: center; justify-content: space-between; background: var(--card-2); border: 1px solid var(--line); border-radius: 6px; padding: 0.4rem 0.8rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; min-height: 38px; box-sizing: border-box;"><div style="display: flex; align-items: center; gap: 0.5rem; overflow: hidden;"><span style="color: var(--accent); font-weight: 700;">[{_ext}]</span><span style="color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{_fname}</span></div><span style="color: var(--muted); flex-shrink: 0;">{_size_str}</span></div>"""
 
-        row_file, row_remove = st.columns([0.94, 0.06])
-        with row_file:
-            st.markdown(row_html, unsafe_allow_html=True)
-        with row_remove:
-            st.button(
-                "×",
-                key=f"remove_file_{idx}",
-                help=f"Hapus {_fname}",
-                on_click=remove_uploaded_file,
-                args=(file_key,),
-                disabled=st.session_state.is_processing,
-            )
+            row_file, row_remove = st.columns([0.94, 0.06])
+            with row_file:
+                st.markdown(row_html, unsafe_allow_html=True)
+            with row_remove:
+                st.button(
+                    "×",
+                    key=f"remove_file_{idx}",
+                    help=f"Hapus {_fname}",
+                    on_click=remove_uploaded_file,
+                    args=(file_key,),
+                    disabled=st.session_state.is_processing,
+                )
 
-    st.markdown('<div style="height: 0.75rem;"></div>', unsafe_allow_html=True)
+        st.markdown('<div style="height: 0.2rem;"></div>', unsafe_allow_html=True)
 
 if uploaded_files:
     if not st.session_state.has_processed:
+        # Pindahkan spasi ke atas tombol dan ubah komposisi untuk mengakomodir dropdown yang lebih lebar
+        st.markdown('<div style="height: 0.2rem;"></div>', unsafe_allow_html=True)
         col_text, col_gap1, col_cancel, col_gap2, col_btn = st.columns([1.6, 0.1, 0.8, 0.1, 1.2])
         with col_text:
             selected_target = st.selectbox(
@@ -954,7 +956,7 @@ if uploaded_files:
             )
 else:
     if not st.session_state.has_processed:
-        st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
+        st.markdown('<div style="height: 0.2rem;"></div>', unsafe_allow_html=True)
         col_text, col_gap, col_btn = st.columns([1.9, 0.1, 1.2])
         with col_text:
             selected_target = st.selectbox(
