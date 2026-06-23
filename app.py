@@ -1,5 +1,6 @@
 ﻿import textwrap
 import time
+import concurrent.futures
 
 import streamlit as st
 import streamlit.components.v1 as components
@@ -959,23 +960,38 @@ if st.session_state.is_processing:
             # Eksekusi hanya maksimal 5 file sesuai filter di atas
             files_to_process = uploaded_files[:5]
 
-            for file in files_to_process:
-                file_bytes = file.read()
-                original_size = len(file_bytes)
+            futures_to_file = {}
+            with concurrent.futures.ThreadPoolExecutor() as executor:
+                for file in files_to_process:
+                    file_bytes = file.read()
+                    original_size = len(file_bytes)
 
-                # Lewati file jika di atas 50MB
-                if original_size > 50 * 1024 * 1024:
-                    st.session_state.results.append(
-                        {
-                            "success": False,
-                            "filename": file.name,
-                            "error": "Ukuran melebihi batas maksimal (50 MB)",
-                        }
-                    )
-                    continue
+                    # Lewati file jika di atas 50MB
+                    if original_size > 50 * 1024 * 1024:
+                        st.session_state.results.append(
+                            {
+                                "success": False,
+                                "filename": file.name,
+                                "error": "Ukuran melebihi batas maksimal (50 MB)",
+                            }
+                        )
+                        continue
 
-                res = process_file(temp_dir, file.name, file_bytes)
-                st.session_state.results.append(res)
+                    future = executor.submit(process_file, temp_dir, file.name, file_bytes)
+                    futures_to_file[future] = file.name
+
+                for future in concurrent.futures.as_completed(futures_to_file):
+                    try:
+                        res = future.result()
+                        st.session_state.results.append(res)
+                    except Exception as e:
+                        st.session_state.results.append(
+                            {
+                                "success": False,
+                                "filename": futures_to_file[future],
+                                "error": f"Error internal kompresi: {str(e)}",
+                            }
+                        )
         finally:
             cleanup_temp_dir(temp_dir)
             
