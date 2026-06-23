@@ -963,8 +963,7 @@ if st.session_state.is_processing:
             futures_to_file = {}
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 for file in files_to_process:
-                    file_bytes = file.read()
-                    original_size = len(file_bytes)
+                    original_size = file.size
 
                     # Lewati file jika di atas 50MB
                     if original_size > 50 * 1024 * 1024:
@@ -977,7 +976,12 @@ if st.session_state.is_processing:
                         )
                         continue
 
-                    future = executor.submit(process_file, temp_dir, file.name, file_bytes)
+                    # Simpan file secara bertahap langsung ke disk (tanpa membacanya sepenuhnya ke memori)
+                    input_path = os.path.join(temp_dir, f"in_{file.name}")
+                    with open(input_path, "wb") as f:
+                        f.write(file.getbuffer())
+
+                    future = executor.submit(process_file, temp_dir, file.name, input_path)
                     futures_to_file[future] = file.name
 
                 for future in concurrent.futures.as_completed(futures_to_file):

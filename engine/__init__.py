@@ -5,36 +5,33 @@ from .pptx_engine import compress_pptx, compress_docx
 
 TARGET_SIZE = 2 * 1024 * 1024  # 2 MB
 
-def process_file(temp_dir, file_name, file_bytes):
+def process_file(temp_dir, file_name, input_path):
     """
     Memproses satu file:
-    1. Menyimpan ke temp_dir
-    2. Cek apakah ukurannya sudah < 2MB (jika ya, langsung kembalikan)
-    3. Eksekusi kompresi maksimal 3 iterasi
-    4. Mengembalikan hasil kompresi terbaik
+    1. Cek apakah ukurannya sudah < 2MB (jika ya, langsung kembalikan)
+    2. Eksekusi kompresi maksimal 3 iterasi
+    3. Mengembalikan hasil kompresi terbaik
     """
-    input_path = os.path.join(temp_dir, f"in_{file_name}")
-    with open(input_path, 'wb') as f:
-        f.write(file_bytes)
-        
     original_size = os.path.getsize(input_path)
-    
+
     # Jika sudah di bawah target, kembalikan langsung
     if original_size <= TARGET_SIZE:
+        with open(input_path, 'rb') as f:
+            best_bytes = f.read()
         return {
             "success": True,
             "filename": file_name,
-            "bytes": file_bytes,
+            "bytes": best_bytes,
             "original_size": original_size,
             "final_size": original_size,
             "status": "ok",
             "message": "Ukuran sudah di bawah 2MB"
         }
-        
+
     ext = file_name.split('.')[-1].lower()
     best_path = input_path
     best_size = original_size
-    best_bytes = file_bytes
+    best_bytes = None
     
     error_message = None
     
@@ -81,7 +78,7 @@ def process_file(temp_dir, file_name, file_bytes):
             "filename": file_name,
             "error": error_message
         }
-        
+
     # Baca byte terbaik
     with open(best_path, 'rb') as f:
         best_bytes = f.read()
