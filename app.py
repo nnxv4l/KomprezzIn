@@ -1156,10 +1156,14 @@ if st.session_state.has_processed and st.session_state.results:
             tag_cls = "ok" if status == "ok" else "warn"
             bar_cls = "" if status == "ok" else " warnbar"
 
+            # Buat label target dinamis untuk pesan peringatan
+            target_label = "2MB" if st.session_state.target_size_label == "Standar (< 2MB)" else "1MB"
+            target_limit_bytes = TARGET_OPTIONS[st.session_state.target_size_label]
+
             hint_html = ""
             if status == "warn":
-                hint_html = '<div class="hint">Belum di bawah 2MB. Saran: kecilkan resolusi gambar atau pecah file.</div>'
-            elif final_size == orig_size and orig_size <= (2 * 1024 * 1024):
+                hint_html = f'<div class="hint">Belum di bawah {target_label}. Saran: kecilkan resolusi gambar atau pecah file.</div>'
+            elif final_size == orig_size and orig_size <= target_limit_bytes:
                 hint_html = '<div class="hint" style="color:var(--muted)">Ukuran file asli sudah kecil.</div>'
 
             html_out += textwrap.dedent(f"""
