@@ -318,20 +318,29 @@ div.st-key-theme_toggle button p {{
 
 /* Custom Selectbox Styling for Target */
 [data-testid="stSelectbox"] label {{display: none !important;}}
-[data-testid="stSelectbox"] {{margin-top: 6px;}}
+[data-testid="stSelectbox"] {{
+    margin-top: 6px;
+    height: 48px !important;
+}}
+[data-testid="stSelectbox"] > div[data-baseweb="select"] {{
+    height: 48px !important;
+}}
 [data-testid="stSelectbox"] > div[data-baseweb="select"] > div {{
     background: transparent !important;
     border: 1px dashed var(--line-2) !important;
-    border-radius: 8px !important;
-    min-height: 38px !important;
-    padding-left: 5px !important;
+    border-radius: 10px !important;
+    min-height: 48px !important;
+    height: 48px !important;
+    padding-left: 8px !important;
+    display: flex;
+    align-items: center;
 }}
 [data-testid="stSelectbox"] > div[data-baseweb="select"] > div:hover {{
     border-color: var(--accent) !important;
 }}
 [data-testid="stSelectbox"] * {{
     font-family: 'Space Mono', monospace !important;
-    font-size: 0.8rem !important;
+    font-size: 0.85rem !important;
     color: var(--ink) !important;
 }}
 
