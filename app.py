@@ -319,7 +319,7 @@ div.st-key-theme_toggle button p {{
 /* Custom Selectbox Styling for Target */
 [data-testid="stSelectbox"] label {{display: none !important;}}
 [data-testid="stSelectbox"] {{
-    margin-top: 6px;
+    margin-top: 5px;
     height: 48px !important;
 }}
 [data-testid="stSelectbox"] > div[data-baseweb="select"] {{
@@ -331,9 +331,10 @@ div.st-key-theme_toggle button p {{
     border-radius: 10px !important;
     min-height: 48px !important;
     height: 48px !important;
-    padding-left: 8px !important;
+    padding-left: 10px !important;
     display: flex;
     align-items: center;
+    box-sizing: border-box !important;
 }}
 [data-testid="stSelectbox"] > div[data-baseweb="select"] > div:hover {{
     border-color: var(--accent) !important;
@@ -422,6 +423,12 @@ div.st-key-btn_cancel button {{
     cursor: pointer !important;
     transition: .15s !important;
     width: 100% !important;
+    margin-top: 5px !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }}
 div.st-key-btn_cancel button:hover {{
     border-color: var(--warn) !important;
@@ -442,15 +449,21 @@ div.st-key-btn_compress button {{
     font-weight: 700 !important;
     border: none !important;
     border-radius: 10px !important;
-    padding: .3rem 1.4rem !important;
+    padding: 0 1.4rem !important;
     cursor: pointer !important;
     background: var(--accent) !important;
     color: var(--accent-ink) !important;
     transition: .15s !important;
     letter-spacing: .01em !important;
-    min-height: 48px;
+    min-height: 48px !important;
+    height: 48px !important;
     width: 100% !important;
     white-space: nowrap !important;
+    margin-top: 5px !important;
+    box-sizing: border-box !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }}
 div.st-key-btn_compress {{
     display: flex;
@@ -698,6 +711,7 @@ div.st-key-btn_reset button:active {{
     cursor: pointer !important;
     transition: .15s !important;
     width: 100% !important;
+    margin-top: 0 !important;
 }}
 div.st-key-btn_cancel button:hover {{
     border-color: var(--warn) !important;
@@ -711,6 +725,7 @@ div.st-key-btn_cancel button p {{
 }}
 div.st-key-btn_compress button {{
         width: 100% !important;
+        margin-top: 0 !important;
     }}
     .target {{
         display: flex !important;
