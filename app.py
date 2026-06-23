@@ -829,6 +829,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+uploaded_files = [] # Inisialisasi awal agar tidak memicu UnboundLocalError di bagian bawah file
+
 if not st.session_state.has_processed:
     st.markdown(
         """
@@ -901,6 +903,7 @@ if not st.session_state.has_processed:
             )
 
     st.markdown('<div style="height: 0.75rem;"></div>', unsafe_allow_html=True)
+
 if uploaded_files:
     if not st.session_state.has_processed:
         col_text, col_gap1, col_cancel, col_gap2, col_btn = st.columns([1.6, 0.1, 0.8, 0.1, 1.2])
