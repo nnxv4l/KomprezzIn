@@ -918,7 +918,7 @@ if uploaded_files:
         )
 else:
     st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
-    col_text, col_btn = st.columns([2, 1.2])
+    col_text, col_gap, col_btn = st.columns([1.9, 0.1, 1.2])
     with col_text:
         selected_target = st.selectbox(
             "Target Kompresi",
@@ -929,6 +929,8 @@ else:
             key="target_selectbox_empty",
         )
         st.session_state.target_size_label = selected_target
+    with col_gap:
+        st.empty()
     with col_btn:
         st.button(
             "Kompres Sekarang &rarr;",
