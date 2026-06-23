@@ -801,6 +801,7 @@ uploaded_files = st.file_uploader(
     type=["pdf", "docx", "doc", "pptx", "ppt"],
     label_visibility="collapsed",
     key=f"uploader_{st.session_state.uploader_key}",
+    disabled=st.session_state.is_processing,
 )
 
 if uploaded_files:
@@ -853,6 +854,7 @@ if uploaded_files:
                 help=f"Hapus {_fname}",
                 on_click=remove_uploaded_file,
                 args=(file_key,),
+                disabled=st.session_state.is_processing,
             )
 
     st.markdown('<div style="height: 0.75rem;"></div>', unsafe_allow_html=True)
@@ -869,6 +871,7 @@ if uploaded_files:
             key="btn_cancel",
             use_container_width=True,
             on_click=do_reset,
+            disabled=st.session_state.is_processing,
         )
     with col_gap:
         st.empty()
@@ -878,6 +881,7 @@ if uploaded_files:
             key="btn_compress",
             use_container_width=True,
             on_click=do_compress,
+            disabled=st.session_state.is_processing,
         )
 else:
     st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
@@ -893,6 +897,7 @@ else:
             key="btn_compress",
             use_container_width=True,
             on_click=do_compress,
+            disabled=st.session_state.is_processing,
         )
 
 # Eksekusi Kompresi
