@@ -825,6 +825,9 @@ st.markdown(
     <div class="step"><div class="n">03</div><div class="t">Proses</div><div class="s">Otomatis &amp; cepat</div></div>
     <div class="step"><div class="n">04</div><div class="t">Selesai</div><div class="s">Unduh &lt; 2MB</div></div>
 </div>
+""",
+    unsafe_allow_html=True,
+)
 
 if not st.session_state.has_processed:
     st.markdown(
