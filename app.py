@@ -402,11 +402,13 @@ div[class*="st-key-remove_file_"] button p {{
     margin: 0 !important;
 }}
 
-[data-testid="stHorizontalBlock"]:has(div.st-key-btn_compress) {{
+[data-testid="stHorizontalBlock"]:has(div.st-key-btn_compress),
+[data-testid="stHorizontalBlock"]:has(div.st-key-btn_compress_empty) {{
     margin-bottom: 0.5rem;
     align-items: center;
 }}
-[data-testid="stHorizontalBlock"]:has(div.st-key-btn_compress) > [data-testid="stColumn"]:nth-child(2) {{
+[data-testid="stHorizontalBlock"]:has(div.st-key-btn_compress) > [data-testid="stColumn"]:nth-child(2),
+[data-testid="stHorizontalBlock"]:has(div.st-key-btn_compress_empty) > [data-testid="stColumn"]:nth-child(2) {{
     display: flex;
     justify-content: flex-end;
 }}
@@ -443,7 +445,8 @@ div.st-key-btn_cancel button p {{
     font-weight: 700 !important;
     margin: 0 !important;
 }}
-div.st-key-btn_compress button {{
+div.st-key-btn_compress button,
+div.st-key-btn_compress_empty button {{
     font-family: 'Space Grotesk', sans-serif !important;
     font-size: .95rem !important;
     font-weight: 700 !important;
@@ -465,22 +468,26 @@ div.st-key-btn_compress button {{
     align-items: center;
     justify-content: center;
 }}
-div.st-key-btn_compress {{
+div.st-key-btn_compress,
+div.st-key-btn_compress_empty {{
     display: flex;
     justify-content: flex-end;
     width: 100%;
 }}
-div.st-key-btn_compress button:hover {{
+div.st-key-btn_compress button:hover,
+div.st-key-btn_compress_empty button:hover {{
     box-shadow: 0 0 22px var(--accent-dim) !important;
     transform: translateY(-1px) !important;
     background: var(--accent) !important;
     color: var(--accent-ink) !important;
 }}
-div.st-key-btn_compress button:active {{
+div.st-key-btn_compress button:active,
+div.st-key-btn_compress_empty button:active {{
     background: var(--accent) !important;
     color: var(--accent-ink) !important;
 }}
-div.st-key-btn_compress button p {{
+div.st-key-btn_compress button p,
+div.st-key-btn_compress_empty button p {{
     font-weight: 700 !important;
     font-size: .95rem !important;
     white-space: nowrap !important;
@@ -687,13 +694,15 @@ div.st-key-btn_reset button:active {{
     }}
 
     /* Target & Button Row Mobile Layout */
-    [data-testid="stHorizontalBlock"]:has(div.st-key-btn_compress) {{
+    [data-testid="stHorizontalBlock"]:has(div.st-key-btn_compress),
+    [data-testid="stHorizontalBlock"]:has(div.st-key-btn_compress_empty) {{
         display: flex !important;
         flex-direction: column !important;
         gap: 0.5rem !important;
         margin-bottom: 0 !important;
     }}
-    [data-testid="stHorizontalBlock"]:has(div.st-key-btn_compress) > [data-testid="stColumn"] {{
+    [data-testid="stHorizontalBlock"]:has(div.st-key-btn_compress) > [data-testid="stColumn"],
+    [data-testid="stHorizontalBlock"]:has(div.st-key-btn_compress_empty) > [data-testid="stColumn"] {{
         width: 100% !important;
         min-width: 100% !important;
         flex: 1 1 100% !important;
@@ -723,7 +732,8 @@ div.st-key-btn_cancel button:active {{
 div.st-key-btn_cancel button p {{
     margin: 0 !important;
 }}
-div.st-key-btn_compress button {{
+div.st-key-btn_compress button,
+div.st-key-btn_compress_empty button {{
         width: 100% !important;
         margin-top: 0 !important;
     }}
@@ -954,28 +964,30 @@ if not st.session_state.has_processed:
             )
     else:
         # Tombol aksi ketika KOSONG (belum ada file)
-        st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
-        col_text, col_gap, col_btn = st.columns([1.9, 0.1, 1.2])
-        with col_text:
-            selected_target = st.selectbox(
-                "Target Kompresi",
-                options=list(TARGET_OPTIONS.keys()),
-                index=list(TARGET_OPTIONS.keys()).index(st.session_state.target_size_label),
-                label_visibility="collapsed",
-                disabled=st.session_state.is_processing,
-                key="target_selectbox_empty",
-            )
-            st.session_state.target_size_label = selected_target
-        with col_gap:
-            st.empty()
-        with col_btn:
-            st.button(
-                "Kompres Sekarang &rarr;",
-                key="btn_compress_empty",
-                use_container_width=True,
-                on_click=do_compress,
-                disabled=st.session_state.is_processing,
-            )
+            st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
+            col_text, col_gap, col_btn = st.columns([1.9, 0.1, 1.2])
+            with col_text:
+                selected_target = st.selectbox(
+                    "Target Kompresi",
+                    options=list(TARGET_OPTIONS.keys()),
+                    index=list(TARGET_OPTIONS.keys()).index(st.session_state.target_size_label),
+                    label_visibility="collapsed",
+                    disabled=st.session_state.is_processing,
+                    key="target_selectbox_empty",
+                )
+                st.session_state.target_size_label = selected_target
+            with col_gap:
+                st.empty()
+            with col_btn:
+                st.button(
+                    "Kompres Sekarang &rarr;",
+                    key="btn_compress_empty",
+                    use_container_width=True,
+                    on_click=do_compress,
+                    disabled=st.session_state.is_processing,
+                )
+
+# Eksekusi Kompresi
 # Eksekusi Kompresi
 
 if st.session_state.is_processing:
