@@ -964,30 +964,29 @@ if not st.session_state.has_processed:
             )
     else:
         # Tombol aksi ketika KOSONG (belum ada file)
-            st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
-            col_text, col_gap, col_btn = st.columns([1.9, 0.1, 1.2])
-            with col_text:
-                selected_target = st.selectbox(
-                    "Target Kompresi",
-                    options=list(TARGET_OPTIONS.keys()),
-                    index=list(TARGET_OPTIONS.keys()).index(st.session_state.target_size_label),
-                    label_visibility="collapsed",
-                    disabled=st.session_state.is_processing,
-                    key="target_selectbox_empty",
-                )
-                st.session_state.target_size_label = selected_target
-            with col_gap:
-                st.empty()
-            with col_btn:
-                st.button(
-                    "Kompres Sekarang &rarr;",
-                    key="btn_compress_empty",
-                    use_container_width=True,
-                    on_click=do_compress,
-                    disabled=st.session_state.is_processing,
-                )
+        st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
+        col_text, col_gap, col_btn = st.columns([1.9, 0.1, 1.2])
+        with col_text:
+            selected_target = st.selectbox(
+                "Target Kompresi",
+                options=list(TARGET_OPTIONS.keys()),
+                index=list(TARGET_OPTIONS.keys()).index(st.session_state.target_size_label),
+                label_visibility="collapsed",
+                disabled=st.session_state.is_processing,
+                key="target_selectbox_empty",
+            )
+            st.session_state.target_size_label = selected_target
+        with col_gap:
+            st.empty()
+        with col_btn:
+            st.button(
+                "Kompres Sekarang &rarr;",
+                key="btn_compress_empty",
+                use_container_width=True,
+                on_click=do_compress,
+                disabled=st.session_state.is_processing,
+            )
 
-# Eksekusi Kompresi
 # Eksekusi Kompresi
 
 if st.session_state.is_processing:
