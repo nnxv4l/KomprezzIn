@@ -826,46 +826,49 @@ st.markdown(
     <div class="step"><div class="n">04</div><div class="t">Selesai</div><div class="s">Unduh &lt; 2MB</div></div>
 </div>
 
-<div class="label" style="margin-top: 2rem;">// Unggah file</div>
-""",
-    unsafe_allow_html=True,
-)
+if not st.session_state.has_processed:
+    st.markdown(
+        """
+    <div class="label" style="margin-top: 2rem;">// Unggah file</div>
+    """,
+        unsafe_allow_html=True,
+    )
 
-# Native Streamlit File Uploader
-uploaded_files = st.file_uploader(
-    "Upload files",
-    accept_multiple_files=True,
-    type=["pdf", "docx", "doc", "pptx", "ppt"],
-    label_visibility="collapsed",
-    key=f"uploader_{st.session_state.uploader_key}",
-    disabled=st.session_state.is_processing,
-)
+    # Native Streamlit File Uploader
+    uploaded_files = st.file_uploader(
+        "Upload files",
+        accept_multiple_files=True,
+        type=["pdf", "docx", "doc", "pptx", "ppt"],
+        label_visibility="collapsed",
+        key=f"uploader_{st.session_state.uploader_key}",
+        disabled=st.session_state.is_processing,
+    )
 
-if uploaded_files:
-    current_upload_keys = {get_uploaded_file_key(f) for f in uploaded_files}
-    st.session_state.removed_upload_keys = [
-        key
-        for key in st.session_state.removed_upload_keys
-        if key in current_upload_keys
-    ]
-    uploaded_files = [
-        f
-        for f in uploaded_files
-        if get_uploaded_file_key(f) not in st.session_state.removed_upload_keys
-    ]
-else:
-    st.session_state.removed_upload_keys = []
+    if uploaded_files:
+        current_upload_keys = {get_uploaded_file_key(f) for f in uploaded_files}
+        st.session_state.removed_upload_keys = [
+            key
+            for key in st.session_state.removed_upload_keys
+            if key in current_upload_keys
+        ]
+        uploaded_files = [
+            f
+            for f in uploaded_files
+            if get_uploaded_file_key(f) not in st.session_state.removed_upload_keys
+        ]
+    else:
+        st.session_state.removed_upload_keys = []
 
-# Membatasi maksimal 5 file
-file_limit_warning = ""
-if uploaded_files and len(uploaded_files) > 5:
-    uploaded_files = uploaded_files[:5]
-    file_limit_warning = "<div style=\"background: var(--warn-bg); color: var(--warn); padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.8rem; margin-top: -0.8rem; margin-bottom: 1rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; text-align: center; border: 1px solid var(--warn);\">Maksimal 5 file per sesi.</div>"
+    # Membatasi maksimal 5 file
+    file_limit_warning = ""
+    if uploaded_files and len(uploaded_files) > 5:
+        uploaded_files = uploaded_files[:5]
+        file_limit_warning = "<div style=\"background: var(--warn-bg); color: var(--warn); padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.8rem; margin-top: -0.8rem; margin-bottom: 1rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; text-align: center; border: 1px solid var(--warn);\">Maksimal 5 file per sesi.</div>"
 
-# Menampilkan Daftar File yang Terpilih (Sebelum Dikompres)
-if uploaded_files:
-    if file_limit_warning:
-        st.markdown(file_limit_warning, unsafe_allow_html=True)
+    # Menampilkan Daftar File yang Terpilih (Sebelum Dikompres)
+    if uploaded_files:
+        if file_limit_warning:
+            st.markdown(file_limit_warning, unsafe_allow_html=True)
 
     for idx, f in enumerate(uploaded_files):
         _fname = f.name
@@ -896,58 +899,62 @@ if uploaded_files:
 
     st.markdown('<div style="height: 0.75rem;"></div>', unsafe_allow_html=True)
 if uploaded_files:
-    col_text, col_cancel, col_gap, col_btn = st.columns([1.5, 0.8, 0.1, 1.4])
-    with col_text:
-        selected_target = st.selectbox(
-            "Target Kompresi",
-            options=list(TARGET_OPTIONS.keys()),
-            index=list(TARGET_OPTIONS.keys()).index(st.session_state.target_size_label),
-            label_visibility="collapsed",
-            disabled=st.session_state.is_processing,
-            key="target_selectbox",
-        )
-        st.session_state.target_size_label = selected_target
-    with col_cancel:
-        st.button(
-            "Batal &#10005;",
-            key="btn_cancel",
-            use_container_width=True,
-            on_click=do_reset,
-            disabled=st.session_state.is_processing,
-        )
-    with col_gap:
-        st.empty()
-    with col_btn:
-        st.button(
-            "Kompres Sekarang &rarr;",
-            key="btn_compress",
-            use_container_width=True,
-            on_click=do_compress,
-            disabled=st.session_state.is_processing,
-        )
+    if not st.session_state.has_processed:
+        col_text, col_gap1, col_cancel, col_gap2, col_btn = st.columns([1.6, 0.1, 0.8, 0.1, 1.2])
+        with col_text:
+            selected_target = st.selectbox(
+                "Target Kompresi",
+                options=list(TARGET_OPTIONS.keys()),
+                index=list(TARGET_OPTIONS.keys()).index(st.session_state.target_size_label),
+                label_visibility="collapsed",
+                disabled=st.session_state.is_processing,
+                key="target_selectbox",
+            )
+            st.session_state.target_size_label = selected_target
+        with col_gap1:
+            st.empty()
+        with col_cancel:
+            st.button(
+                "Batal &#10005;",
+                key="btn_cancel",
+                use_container_width=True,
+                on_click=do_reset,
+                disabled=st.session_state.is_processing,
+            )
+        with col_gap2:
+            st.empty()
+        with col_btn:
+            st.button(
+                "Kompres Sekarang &rarr;",
+                key="btn_compress",
+                use_container_width=True,
+                on_click=do_compress,
+                disabled=st.session_state.is_processing,
+            )
 else:
-    st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
-    col_text, col_gap, col_btn = st.columns([1.9, 0.1, 1.2])
-    with col_text:
-        selected_target = st.selectbox(
-            "Target Kompresi",
-            options=list(TARGET_OPTIONS.keys()),
-            index=list(TARGET_OPTIONS.keys()).index(st.session_state.target_size_label),
-            label_visibility="collapsed",
-            disabled=st.session_state.is_processing,
-            key="target_selectbox_empty",
-        )
-        st.session_state.target_size_label = selected_target
-    with col_gap:
-        st.empty()
-    with col_btn:
-        st.button(
-            "Kompres Sekarang &rarr;",
-            key="btn_compress",
-            use_container_width=True,
-            on_click=do_compress,
-            disabled=st.session_state.is_processing,
-        )
+    if not st.session_state.has_processed:
+        st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
+        col_text, col_gap, col_btn = st.columns([1.9, 0.1, 1.2])
+        with col_text:
+            selected_target = st.selectbox(
+                "Target Kompresi",
+                options=list(TARGET_OPTIONS.keys()),
+                index=list(TARGET_OPTIONS.keys()).index(st.session_state.target_size_label),
+                label_visibility="collapsed",
+                disabled=st.session_state.is_processing,
+                key="target_selectbox_empty",
+            )
+            st.session_state.target_size_label = selected_target
+        with col_gap:
+            st.empty()
+        with col_btn:
+            st.button(
+                "Kompres Sekarang &rarr;",
+                key="btn_compress",
+                use_container_width=True,
+                on_click=do_compress,
+                disabled=st.session_state.is_processing,
+            )
 
 # Eksekusi Kompresi
 
