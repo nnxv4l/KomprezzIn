@@ -919,9 +919,7 @@ if not st.session_state.has_processed:
 
         st.markdown('<div style="height: 0.2rem;"></div>', unsafe_allow_html=True)
 
-if uploaded_files:
-    if not st.session_state.has_processed:
-        # Pindahkan spasi ke atas tombol dan ubah komposisi untuk mengakomodir dropdown yang lebih lebar
+        # Tombol aksi ketika ADA file yang diunggah
         st.markdown('<div style="height: 0.2rem;"></div>', unsafe_allow_html=True)
         col_text, col_gap1, col_cancel, col_gap2, col_btn = st.columns([1.6, 0.1, 0.8, 0.1, 1.2])
         with col_text:
@@ -954,9 +952,9 @@ if uploaded_files:
                 on_click=do_compress,
                 disabled=st.session_state.is_processing,
             )
-else:
-    if not st.session_state.has_processed:
-        st.markdown('<div style="height: 0.2rem;"></div>', unsafe_allow_html=True)
+    else:
+        # Tombol aksi ketika KOSONG (belum ada file)
+        st.markdown('<div style="height: 0.5rem;"></div>', unsafe_allow_html=True)
         col_text, col_gap, col_btn = st.columns([1.9, 0.1, 1.2])
         with col_text:
             selected_target = st.selectbox(
@@ -973,12 +971,11 @@ else:
         with col_btn:
             st.button(
                 "Kompres Sekarang &rarr;",
-                key="btn_compress",
+                key="btn_compress_empty",
                 use_container_width=True,
                 on_click=do_compress,
                 disabled=st.session_state.is_processing,
             )
-
 # Eksekusi Kompresi
 
 if st.session_state.is_processing:
