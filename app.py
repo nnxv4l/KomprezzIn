@@ -1,6 +1,6 @@
-﻿import textwrap
-import time
+﻿import time
 import os
+from components.ui import render_results_header, render_error_card, render_file_card
 import concurrent.futures
 
 import streamlit as st
