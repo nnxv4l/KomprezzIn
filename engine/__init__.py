@@ -34,6 +34,7 @@ def process_file(temp_dir, file_name, input_path, target_size=2097152):
     error_message = None
     
     # Maksimal 3 iterasi kompresi
+    tolerance_size = target_size * 1.05
     for iteration in range(1, 4):
         output_path = os.path.join(temp_dir, f"out_{iteration}_{file_name}")
         
@@ -54,12 +55,19 @@ def process_file(temp_dir, file_name, input_path, target_size=2097152):
             if os.path.exists(output_path):
                 current_size = os.path.getsize(output_path)
                 # Pastikan ukurannya mengecil
+                size_difference_pct = ((best_size - current_size) / best_size) * 100
+                
                 if current_size < best_size:
                     best_size = current_size
                     best_path = output_path
                     
                 # Hentikan jika sudah mencapai target
-                if best_size <= target_size:
+                # OPTIMASI 1: Hentikan jika sudah masuk dalam batas toleransi target (misal 1.04MB untuk target 1MB)
+                if best_size <= tolerance_size:
+                    break
+                    
+                # OPTIMASI 2: Hentikan jika penurunan ukuran sangat kecil (< 3%), tidak efisien lanjut iterasi
+                if size_difference_pct < 3.0:
                     break
         except ValueError as ve:
              # Biasanya terkait file ber-password
