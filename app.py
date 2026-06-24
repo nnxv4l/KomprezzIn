@@ -158,45 +158,9 @@ if not st.session_state.has_processed:
     else:
         st.session_state.removed_upload_keys = []
 
-    # Membatasi maksimal 5 file
-    file_limit_warning = ""
-    if uploaded_files and len(uploaded_files) > 5:
-        uploaded_files = uploaded_files[:5]
-        file_limit_warning = "<div style=\"background: var(--warn-bg); color: var(--warn); padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.8rem; margin-top: -0.8rem; margin-bottom: 1rem; font-family: 'Space Grotesk', sans-serif; font-weight: 600; text-align: center; border: 1px solid var(--warn);\">Maksimal 5 file per sesi.</div>"
-
-    # Menampilkan Daftar File yang Terpilih (Sebelum Dikompres)
+    # Menampilkan Daftar File yang Terpilih menggunakan Fragment
     if uploaded_files:
-        if file_limit_warning:
-            st.markdown(file_limit_warning, unsafe_allow_html=True)
-
-        for idx, f in enumerate(uploaded_files):
-            _fname = f.name
-            _ext = _fname.rsplit(".", 1)[-1].upper() if "." in _fname else "FILE"
-            _size_mb = f.size / (1024 * 1024)
-            _size_str = f"{_size_mb:.1f} MB".replace(".", ",")
-            file_key = get_uploaded_file_key(f)
-
-            is_over_limit = f.size > 50 * 1024 * 1024  # 50 MB
-
-            if is_over_limit:
-                row_html = f"""<div style="display: flex; align-items: center; justify-content: space-between; background: var(--card-2); border: 1px dashed var(--line); border-radius: 6px; padding: 0.4rem 0.8rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; opacity: 0.6; min-height: 38px; box-sizing: border-box;"><div style="display: flex; align-items: center; gap: 0.5rem; overflow: hidden;"><span style="color: var(--warn); font-weight: 700;">[ {_ext} ]</span><span style="color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: line-through;">{_fname}</span></div><span style="color: var(--warn); flex-shrink: 0;">{_size_str} (Maks 50MB)</span></div>"""
-            else:
-                row_html = f"""<div style="display: flex; align-items: center; justify-content: space-between; background: var(--card-2); border: 1px solid var(--line); border-radius: 6px; padding: 0.4rem 0.8rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; min-height: 38px; box-sizing: border-box;"><div style="display: flex; align-items: center; gap: 0.5rem; overflow: hidden;"><span style="color: var(--accent); font-weight: 700;">[{_ext}]</span><span style="color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{_fname}</span></div><span style="color: var(--muted); flex-shrink: 0;">{_size_str}</span></div>"""
-
-            row_file, row_remove = st.columns([0.94, 0.06])
-            with row_file:
-                st.markdown(row_html, unsafe_allow_html=True)
-            with row_remove:
-                st.button(
-                    "×",
-                    key=f"remove_file_{idx}",
-                    help=f"Hapus {_fname}",
-                    on_click=remove_uploaded_file,
-                    args=(file_key,),
-                    disabled=st.session_state.is_processing,
-                )
-
-        st.markdown('<div style="height: 0.2rem;"></div>', unsafe_allow_html=True)
+        render_uploaded_files_list(uploaded_files)
 
         # Tombol aksi ketika ADA file yang diunggah
         st.markdown('<div style="height: 0.2rem;"></div>', unsafe_allow_html=True)
