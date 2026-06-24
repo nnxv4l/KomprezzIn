@@ -127,7 +127,7 @@ div.st-key-theme_toggle button p {
 .subtitle b{color:var(--ink);font-weight:600;}
 
 /* Steps */
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:1.6rem 0 1.6rem 0;}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin:1.6rem 0 2.5rem 0;}
 .step{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:1.1rem 1rem;transition:.18s;cursor:default;}
 .step:hover{border-color:var(--accent);transform:translateY(-3px);}
 .step .n{font-family:'Space Mono',monospace;font-size:.82rem;font-weight:700;color:var(--accent);}
