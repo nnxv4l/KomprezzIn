@@ -180,7 +180,7 @@ div.st-key-theme_toggle button p {
 
 /* Inject custom icon and text via pseudo-elements */
 [data-testid="stFileUploaderDropzone"]::before {
-    content: "[ + ]\\A Tarik & lepas file di sini\\A atau klik untuk memilih - PDF / DOCX / PPTX - maks 50MB";
+    content: "[ + ]\A Tarik & lepas file di sini\A atau klik untuk memilih - PDF / DOCX / PPTX - maks 50MB";
     white-space: pre-wrap;
     text-align: center;
     font-family: 'Space Grotesk', sans-serif;
