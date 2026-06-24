@@ -4,6 +4,12 @@
   <p><b>Aplikasi web modern untuk mengompresi file PDF, DOCX, dan PPTX di bawah 2MB.</b></p>
 
   <p>
+    <img src="https://img.shields.io/badge/python-3.8+-blue.svg" alt="Python">
+    <img src="https://img.shields.io/badge/Streamlit-Framework-FF4B4B.svg" alt="Streamlit">
+    <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License">
+  </p>
+
+  <p>
     <a href="#fitur-utama">Fitur Utama</a> •
     <a href="#tech-stack">Tech Stack</a> •
     <a href="#cara-menjalankan-secara-lokal">Cara Menjalankan</a> •
@@ -85,3 +91,11 @@ Aplikasi akan terbuka secara otomatis pada peramban web di `http://localhost:850
 Aplikasi ini siap dideploy secara instan pada **Streamlit Community Cloud**:
 - Server Streamlit akan membaca berkas `requirements.txt` untuk menginstal pustaka Python.
 - Server akan membaca berkas `packages.txt` untuk menginstal dependensi tingkat sistem (`ghostscript`) secara otomatis.
+
+
+## ⚠️ Batasan (Limitations)
+- Proses kompresi bergantung pada CPU server. Untuk dokumen yang berisi ratusan halaman hasil pemindaian (*scan*) resolusi tinggi (raster), proses kompresi mungkin membutuhkan waktu lebih lama.
+- Jika dokumen tidak dapat dikompresi di bawah 2MB setelah melalui iterasi maksimum, aplikasi akan memberikan peringatan dan menyarankan pengguna untuk mengecilkan resolusi gambar secara manual.
+
+## 📝 Lisensi
+Proyek ini didistribusikan di bawah lisensi **MIT**. Lihat berkas [LICENSE](LICENSE) untuk informasi lebih lanjut.
