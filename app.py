@@ -380,7 +380,7 @@ if st.session_state.has_processed and st.session_state.results:
     total_files = len(st.session_state.results)
     success_files = sum(1 for r in st.session_state.results if r.get("success", False))
 
-    html_out = f'<div id="results"><div class="reshead" style="margin-top: 2rem;"><div class="label" style="margin:0">// Hasil kompres</div><div class="meta">{total_files} file &bull; {success_files} diproses</div></div>'
+    html_out = render_results_header(total_files, success_files)
 
     for r in st.session_state.results:
         fname = r.get("filename", "Unknown")
@@ -401,13 +401,7 @@ if st.session_state.has_processed and st.session_state.results:
 
         if not r.get("success", False):
             err_msg = r.get("error", "Gagal memproses")
-            html_out += textwrap.dedent(f"""
-            <div class="fcard">
-                <div class="fcard-top"><div class="ficon {icon_cls}">{icon_text}</div>
-                <div><div class="fname">{fname}</div><div class="fmeta">Gagal diproses</div></div>
-                <span class="tag warn">Error</span></div>
-                <div class="hint">{err_msg}</div>
-            </div>""")
+            html_out += render_error_card(fname, icon_cls, icon_text, err_msg)
         else:
             orig_size = r["original_size"]
             final_size = r["final_size"]
@@ -435,15 +429,7 @@ if st.session_state.has_processed and st.session_state.results:
             elif final_size == orig_size and orig_size <= target_limit_bytes:
                 hint_html = '<div class="hint" style="color:var(--muted)">Ukuran file asli sudah kecil.</div>'
 
-            html_out += textwrap.dedent(f"""
-            <div class="fcard">
-                <div class="fcard-top"><div class="ficon {icon_cls}">{icon_text}</div>
-                <div><div class="fname">{fname}</div><div class="fmeta">{orig_str} &rarr; {final_str}</div></div>
-                <span class="tag {tag_cls}">{final_str}</span></div>
-                <div class="bar{bar_cls}"><span style="width: {saving_pct}%;"></span></div>
-                <div class="barlabel"><span>penghematan</span><b class="cnt">{saving_pct}%</b></div>
-                {hint_html}
-            </div>""")
+            html_out += render_file_card(fname, orig_str, final_str, saving_pct, status, hint_html, icon_cls, icon_text)
 
     html_out += "</div>"
     st.markdown(html_out, unsafe_allow_html=True)
