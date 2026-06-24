@@ -1,0 +1,8 @@
+:root {
+  --bg:#f3f3ef;--card:#ffffff;--card-2:#fafaf7;--line:#e3e1d8;--line-2:#d4d2c8;
+  --ink:#15161a;--muted:#6c6d6a;--accent:#3a7d12;--accent-ink:#ffffff;--accent-dim:rgba(58,125,18,.10);
+  --ok:#15803d;--ok-bg:rgba(21,128,61,.10);--warn:#9a5b0a;--warn-bg:rgba(154,91,10,.12);--track:#e9e7df;
+  --grid:rgba(0,0,0,.025);--glow:rgba(58,125,18,.06);
+  --toggle-ink:#15161a;
+  --toggle-border:rgba(0,0,0,.28);
+}
