@@ -84,10 +84,10 @@ def load_css(theme: str) -> str:
     with open("assets/main.css", "r") as f:
         main_css = f.read()
         
-    return f"<style>
+    return f"""<style>
 {theme_css}
 {main_css}
-</style>"
+</style>"""
 
 st.markdown(load_css(st.session_state.theme), unsafe_allow_html=True)
 
