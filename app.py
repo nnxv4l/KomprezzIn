@@ -1,20 +1,11 @@
 ﻿import time
 import os
 import logging
-from components.ui import render_results_header, render_error_card, render_file_card
 import concurrent.futures
-
-# Konfigurasi Log Dasar
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
-logger = logging.getLogger(__name__)
-
 import streamlit as st
 import streamlit.components.v1 as components
 
+from components.ui import render_results_header, render_error_card, render_file_card
 from engine import process_file
 from engine.utils import (
     cleanup_temp_dir,
@@ -23,6 +14,14 @@ from engine.utils import (
     format_size,
     compute_file_hash,
 )
+
+# Konfigurasi Log Dasar
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logger = logging.getLogger(__name__)
 
 # Session State for Theme
 if "theme" not in st.session_state:

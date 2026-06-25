@@ -3,3 +3,4 @@ Pillow
 python-docx
 python-pptx
 pikepdf
+pytest
