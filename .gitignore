@@ -33,3 +33,8 @@ Thumbs.db
 prd.md
 preview-komprezzin.html
 PLAN.md
+
+# Cache
+__pycache__/
+*.pyc
+.pytest_cache/
