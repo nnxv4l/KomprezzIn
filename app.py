@@ -115,10 +115,10 @@ st.markdown(
     """
 <div class="kicker" style="margin-top: 0;"><span class="pulse"></span>Kompres file &bull; maks 2 MB</div>
 <div class="title">Komprezz<span class="hl">In</span></div>
-<div class="subtitle">Kompres file PDF, Word, &amp; PPTX jadi <b>di bawah 2MB</b>.</div>
+<div class="subtitle">Kompres file PDF, Word, Excel, &amp; PPTX jadi <b>di bawah 2MB</b>.</div>
 
 <div class="steps">
-    <div class="step"><div class="n">01</div><div class="t">Siapkan</div><div class="s">PDF, Word, PPTX</div></div>
+    <div class="step"><div class="n">01</div><div class="t">Siapkan</div><div class="s">PDF, Word, Excel, PPTX</div></div>
     <div class="step"><div class="n">02</div><div class="t">Unggah</div><div class="s">Tarik &amp; lepas / klik</div></div>
     <div class="step"><div class="n">03</div><div class="t">Proses</div><div class="s">Otomatis &amp; cepat</div></div>
     <div class="step"><div class="n">04</div><div class="t">Selesai</div><div class="s">Unduh &lt; 2MB</div></div>
