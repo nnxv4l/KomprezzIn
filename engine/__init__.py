@@ -14,6 +14,24 @@ def process_file(temp_dir, file_name, input_path, target_size=2097152):
     2. Eksekusi kompresi maksimal 3 iterasi
     3. Mengembalikan hasil kompresi terbaik
     """
+    # Validasi ekstensi DULU sebelum cek size, agar file aneh tidak by-pass
+    if '.' not in file_name:
+        logger.warning(f"File ditolak: {file_name} (Tanpa ekstensi)")
+        return {
+            "success": False,
+            "filename": file_name,
+            "error": "Format file tidak diketahui (tanpa ekstensi)"
+        }
+
+    ext = file_name.rsplit('.', 1)[-1].lower()
+    if ext not in ['pdf', 'docx', 'pptx', 'xlsx']:
+        logger.warning(f"Format tidak didukung: {file_name} (Ext: {ext})")
+        return {
+            "success": False,
+            "filename": file_name,
+            "error": "Format tidak didukung"
+        }
+
     original_size = os.path.getsize(input_path)
 
     # Jika sudah di bawah target, kembalikan langsung
@@ -30,16 +48,6 @@ def process_file(temp_dir, file_name, input_path, target_size=2097152):
             "message": "Ukuran sudah di bawah target"
         }
 
-    # Validasi ekstensi
-    if '.' not in file_name:
-        logger.warning(f"File ditolak: {file_name} (Tanpa ekstensi)")
-        return {
-            "success": False,
-            "filename": file_name,
-            "error": "Format file tidak diketahui (tanpa ekstensi)"
-        }
-
-    ext = file_name.rsplit('.', 1)[-1].lower()
     best_path = input_path
     best_size = original_size
     best_bytes = None
@@ -54,20 +62,13 @@ def process_file(temp_dir, file_name, input_path, target_size=2097152):
         try:
             if ext == 'pdf':
                 compress_pdf(best_path, output_path, iteration)
-            elif ext in ['docx']:
+            elif ext == 'docx':
                 compress_docx(best_path, output_path, iteration)
-            elif ext in ['pptx']:
+            elif ext == 'pptx':
                 compress_pptx(best_path, output_path, iteration)
-            elif ext in ['xlsx']:
+            elif ext == 'xlsx':
                 compress_xlsx(best_path, output_path, iteration)
-            else:
-                logger.warning(f"Format tidak didukung: {file_name} (Ext: {ext})")
-                return {
-                    "success": False,
-                    "filename": file_name,
-                    "error": "Format tidak didukung"
-                }
-                
+
             if os.path.exists(output_path):
                 current_size = os.path.getsize(output_path)
                 # Pastikan ukurannya mengecil
