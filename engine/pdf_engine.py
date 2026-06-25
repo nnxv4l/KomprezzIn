@@ -52,30 +52,30 @@ def compress_pdf(input_path, output_path, iteration=1):
         gs_cmd.insert(-1, "-dMonoImageResolution=72")
 
     try:
-        subprocess.run(gs_cmd, capture_output=True, text=True, check=True)
-        
+        result = subprocess.run(gs_cmd, capture_output=True, text=True, check=False)
+
+        # Mengabaikan error bawaan GS, selama output ada dan > 0 byte
         if not os.path.exists(output_path) or os.path.getsize(output_path) == 0:
-            raise Exception("Ghostscript gagal menghasilkan file keluaran.")
-            
+            error_msg = result.stderr.strip() if result.stderr else "Ghostscript gagal menghasilkan file keluaran tanpa error spesifik."
+            raise Exception(error_msg)
+
         return True
     except FileNotFoundError:
          # Jika gswin64c tidak ditemukan di Windows, coba fallback ke gswin32c atau gs
          if platform.system() == "Windows":
              try:
                  gs_cmd[0] = "gswin32c"
-                 subprocess.run(gs_cmd, capture_output=True, text=True, check=True)
+                 subprocess.run(gs_cmd, capture_output=True, text=True, check=False)
                  if os.path.exists(output_path) and os.path.getsize(output_path) > 0:
                      return True
              except FileNotFoundError:
                  try:
                      gs_cmd[0] = "gs"
-                     subprocess.run(gs_cmd, capture_output=True, text=True, check=True)
+                     subprocess.run(gs_cmd, capture_output=True, text=True, check=False)
                      if os.path.exists(output_path) and os.path.getsize(output_path) > 0:
                          return True
                  except Exception:
                      pass
-         raise Exception("Ghostscript (gs/gswin64c/gs) tidak ditemukan di sistem atau gagal berjalan. Harap install Ghostscript.")
-    except subprocess.CalledProcessError as e:
-        raise Exception(f"Ghostscript error: {e.stderr}")
+         raise Exception("Ghostscript (gs/gswin64c/gs) tidak ditemukan di sistem. Harap install Ghostscript.")
     except Exception as e:
         raise Exception(str(e))
