@@ -183,7 +183,7 @@ if not st.session_state.has_processed:
     raw_uploaded_files = st.file_uploader(
         "Upload files",
         accept_multiple_files=True,
-        type=["pdf", "docx", "doc", "pptx", "ppt"],
+        type=["pdf", "docx", "doc", "pptx", "ppt", "xlsx", "xls"],
         label_visibility="collapsed",
         key=f"uploader_{st.session_state.uploader_key}",
         disabled=st.session_state.is_processing,
@@ -407,6 +407,9 @@ if st.session_state.has_processed and st.session_state.results:
         elif ext in ["pptx", "ppt"]:
             icon_cls = "ppt"
             icon_text = "PPT"
+        elif ext in ["xlsx", "xls"]:
+            icon_cls = "xls"
+            icon_text = "XLS"
         else:
             icon_cls = "doc"
             icon_text = ext.upper()[:3]

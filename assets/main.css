@@ -461,7 +461,7 @@ div.st-key-btn_reset button:active {
 .fcard-top{display:flex;align-items:center;gap:.85rem;}
 .ficon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;
   font-family:'Space Mono',monospace;font-weight:700;font-size:.66rem;color:#fff;flex:none;}
-.pdf{background:#d9472f;}.doc{background:#2f6bd9;}.ppt{background:#d97a1c;}
+.pdf{background:#d9472f;}.doc{background:#2f6bd9;}.ppt{background:#d97a1c;}.xls{background:#107c41;}
 .fname{font-family:'Space Grotesk', sans-serif;font-weight:600;font-size:.98rem;color:var(--ink);}
 .fmeta{font-size:.8rem;color:var(--muted);font-family:'Space Mono',monospace;margin-top:.12rem;}
 .tag{margin-left:auto;font-family:'Space Mono',monospace;font-size:.76rem;font-weight:700;padding:.3rem .65rem;border-radius:7px;flex:none;}

@@ -2,6 +2,7 @@ import os
 
 from .pdf_engine import compress_pdf
 from .pptx_engine import compress_pptx, compress_docx
+from .xlsx_engine import compress_xlsx
 
 def process_file(temp_dir, file_name, input_path, target_size=2097152):
     """
@@ -53,6 +54,8 @@ def process_file(temp_dir, file_name, input_path, target_size=2097152):
                 compress_docx(best_path, output_path, iteration)
             elif ext in ['pptx']:
                 compress_pptx(best_path, output_path, iteration)
+            elif ext in ['xlsx']:
+                compress_xlsx(best_path, output_path, iteration)
             else:
                 return {
                     "success": False,
