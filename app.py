@@ -20,6 +20,8 @@ if "theme" not in st.session_state:
 
 if "is_processing" not in st.session_state:
     st.session_state.is_processing = False
+if "start_processing" not in st.session_state:
+    st.session_state.start_processing = False
 if "has_processed" not in st.session_state:
     st.session_state.has_processed = False
 if "results" not in st.session_state:
@@ -46,6 +48,7 @@ def do_compress():
     st.session_state.results = []
     st.session_state.has_processed = False
     st.session_state.is_processing = True
+    st.session_state.start_processing = True # Tandai mulai, tapi eksekusi setelah UI terkunci
 
 
 def remove_uploaded_file(file_key):
@@ -105,6 +108,7 @@ with c2:
         "LIGHT" if st.session_state.theme == "dark" else "DARK",
         key="theme_toggle",
         on_click=toggle_theme,
+        disabled=st.session_state.is_processing,
     )
 
 st.markdown(
@@ -123,10 +127,10 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-uploaded_files = [] # Inisialisasi awal agar tidak memicu UnboundLocalError di bagian bawah file
+uploaded_files = [] # Inisialisasi awal default
 
 
-@st.fragment
+# Tidak lagi menggunakan @st.fragment agar state removal dapat sinkron langsung dengan uploader utama
 def render_uploaded_files_list(uploaded_files):
     # Membatasi maksimal 5 file
     file_limit_warning = ""
@@ -176,7 +180,7 @@ if not st.session_state.has_processed:
     )
 
     # Native Streamlit File Uploader
-    uploaded_files = st.file_uploader(
+    raw_uploaded_files = st.file_uploader(
         "Upload files",
         accept_multiple_files=True,
         type=["pdf", "docx", "doc", "pptx", "ppt"],
@@ -185,8 +189,8 @@ if not st.session_state.has_processed:
         disabled=st.session_state.is_processing,
     )
 
-    if uploaded_files:
-        current_upload_keys = {get_uploaded_file_key(f) for f in uploaded_files}
+    if raw_uploaded_files:
+        current_upload_keys = {get_uploaded_file_key(f) for f in raw_uploaded_files}
         st.session_state.removed_upload_keys = [
             key
             for key in st.session_state.removed_upload_keys
@@ -194,11 +198,12 @@ if not st.session_state.has_processed:
         ]
         uploaded_files = [
             f
-            for f in uploaded_files
+            for f in raw_uploaded_files
             if get_uploaded_file_key(f) not in st.session_state.removed_upload_keys
         ]
     else:
         st.session_state.removed_upload_keys = []
+        uploaded_files = []
 
     # Menampilkan Daftar File yang Terpilih menggunakan Fragment
     if uploaded_files:
@@ -264,7 +269,7 @@ if not st.session_state.has_processed:
 
 # Eksekusi Kompresi
 
-if st.session_state.is_processing:
+if st.session_state.is_processing and st.session_state.start_processing:
     if not uploaded_files:
         st.markdown(
             """
@@ -374,6 +379,7 @@ if st.session_state.is_processing:
             
         st.session_state.is_processing = False
         st.session_state.has_processed = True
+        st.session_state.start_processing = False # Matikan tanda eksekusi
 
         # Hapus loading indicator
         loading_placeholder.empty()

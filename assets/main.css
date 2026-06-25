@@ -85,7 +85,7 @@ div.st-key-theme_toggle button {
     font-weight: 700 !important;
     padding: .1rem .72rem !important;
     border-radius: 8px !important;
-    cursor: pointer !important;
+    cursor: pointer;
     transition: .15s !important;
     letter-spacing: .05em !important;
     min-height: 32px !important;
@@ -276,7 +276,7 @@ div[class*="st-key-remove_file_"] button {
     font-size: 1rem !important;
     font-weight: 700 !important;
     line-height: 1 !important;
-    cursor: pointer !important;
+    cursor: pointer;
     transition: .15s !important;
 }
 div[class*="st-key-remove_file_"] button:hover {
@@ -318,7 +318,7 @@ div.st-key-btn_cancel button {
     border-radius: 10px !important;
     background: transparent !important;
     color: var(--muted) !important;
-    cursor: pointer !important;
+    cursor: pointer;
     transition: .15s !important;
     width: 100% !important;
     margin-top: 5px !important;
@@ -349,7 +349,7 @@ div.st-key-btn_compress_empty button {
     border: none !important;
     border-radius: 10px !important;
     padding: 0 1.4rem !important;
-    cursor: pointer !important;
+    cursor: pointer;
     background: var(--accent) !important;
     color: var(--accent-ink) !important;
     transition: .15s !important;
@@ -397,7 +397,7 @@ div.st-key-btn_download button, div.st-key-btn_reset button {
     font-weight: 600 !important;
     font-family: 'Space Grotesk', sans-serif !important;
     border-radius: 10px !important;
-    cursor: pointer !important;
+    cursor: pointer;
     transition: .15s !important;
     letter-spacing: .01em !important;
     width: 100% !important;
@@ -613,7 +613,7 @@ div.st-key-btn_reset button:active {
     border-radius: 10px !important;
     background: transparent !important;
     color: var(--muted) !important;
-    cursor: pointer !important;
+    cursor: pointer;
     transition: .15s !important;
     width: 100% !important;
     margin-top: 0 !important;
@@ -713,3 +713,34 @@ div.st-key-btn_reset button {
     min-width: 0 !important;
     display: block !important;
 }
+
+[data-testid="stButton"] button:disabled,
+[data-testid="stDownloadButton"] button:disabled,
+div[class*="st-key"] button:disabled {
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+}
+
+
+/* Styling global untuk semua elemen interaktif yang disabled */
+[data-baseweb="select"] [aria-disabled="true"],
+[data-baseweb="select"] [aria-disabled="true"] *,
+[data-testid="stFileUploaderDropzone"]:has(input:disabled),
+[data-testid="stSelectbox"] select:disabled,
+[data-testid="stSelectbox"]:has(input:disabled) {
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+    border-color: var(--line-2) !important;
+    background: transparent !important;
+}
+
+/* Hindari efek hover pada dropzone uploader jika sedang disabled */
+[data-testid="stFileUploaderDropzone"]:has(input:disabled):hover {
+    border-color: var(--line-2) !important;
+    background: var(--card) !important;
+    transform: none !important;
+}
+[data-testid="stFileUploaderDropzone"]:has(input:disabled):hover::before {
+    transform: none !important;
+}
+
