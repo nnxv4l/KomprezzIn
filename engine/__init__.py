@@ -1,8 +1,11 @@
 import os
+import logging
 
 from .pdf_engine import compress_pdf
 from .pptx_engine import compress_pptx, compress_docx
 from .xlsx_engine import compress_xlsx
+
+logger = logging.getLogger(__name__)
 
 def process_file(temp_dir, file_name, input_path, target_size=2097152):
     """
@@ -29,6 +32,7 @@ def process_file(temp_dir, file_name, input_path, target_size=2097152):
 
     # Validasi ekstensi
     if '.' not in file_name:
+        logger.warning(f"File ditolak: {file_name} (Tanpa ekstensi)")
         return {
             "success": False,
             "filename": file_name,
@@ -57,6 +61,7 @@ def process_file(temp_dir, file_name, input_path, target_size=2097152):
             elif ext in ['xlsx']:
                 compress_xlsx(best_path, output_path, iteration)
             else:
+                logger.warning(f"Format tidak didukung: {file_name} (Ext: {ext})")
                 return {
                     "success": False,
                     "filename": file_name,
@@ -75,21 +80,26 @@ def process_file(temp_dir, file_name, input_path, target_size=2097152):
                 # Hentikan jika sudah mencapai target
                 # OPTIMASI 1: Hentikan jika sudah masuk dalam batas toleransi target (misal 1.04MB untuk target 1MB)
                 if best_size <= tolerance_size:
+                    logger.info(f"Target tercapai untuk {file_name} pada iterasi {iteration}.")
                     break
-                    
+
                 # OPTIMASI 2: Hentikan jika penurunan ukuran sangat kecil (< 3%), tidak efisien lanjut iterasi
                 if size_difference_pct < 3.0:
+                    logger.info(f"Kompresi {file_name} stagnan di iterasi {iteration}. Menghentikan proses.")
                     break
         except ValueError as ve:
              # Biasanya terkait file ber-password
              error_message = str(ve)
+             logger.warning(f"Validasi gagal untuk {file_name}: {error_message}")
              break
         except Exception as e:
             error_message = str(e)
+            logger.error(f"Error kompresi {file_name} (iterasi {iteration}): {error_message}")
             # Lanjut ke iterasi berikutnya jika bukan error fatal
             continue
 
     if error_message and best_size == original_size:
+        logger.error(f"Kompresi gagal total untuk {file_name}. Mengembalikan error ke UI.")
         return {
             "success": False,
             "filename": file_name,

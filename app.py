@@ -1,7 +1,16 @@
 ﻿import time
 import os
+import logging
 from components.ui import render_results_header, render_error_card, render_file_card
 import concurrent.futures
+
+# Konfigurasi Log Dasar
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logger = logging.getLogger(__name__)
 
 import streamlit as st
 import streamlit.components.v1 as components
@@ -384,7 +393,12 @@ if st.session_state.is_processing and st.session_state.start_processing:
                     try:
                         res = future.result()
                         st.session_state.results.append(res)
+                        if res.get("success"):
+                            logger.info(f"Berhasil mengompres: {futures_to_file[future]}")
+                        else:
+                            logger.warning(f"Gagal mengompres {futures_to_file[future]}: {res.get('error')}")
                     except Exception as e:
+                        logger.error(f"Threadpool error untuk {futures_to_file[future]}: {str(e)}", exc_info=True)
                         st.session_state.results.append(
                             {
                                 "success": False,
