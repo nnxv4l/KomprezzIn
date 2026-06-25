@@ -26,7 +26,15 @@ def process_file(temp_dir, file_name, input_path, target_size=2097152):
             "message": "Ukuran sudah di bawah target"
         }
 
-    ext = file_name.split('.')[-1].lower()
+    # Validasi ekstensi
+    if '.' not in file_name:
+        return {
+            "success": False,
+            "filename": file_name,
+            "error": "Format file tidak diketahui (tanpa ekstensi)"
+        }
+
+    ext = file_name.rsplit('.', 1)[-1].lower()
     best_path = input_path
     best_size = original_size
     best_bytes = None
