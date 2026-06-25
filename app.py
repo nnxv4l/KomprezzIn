@@ -12,6 +12,7 @@ from engine.utils import (
     create_temp_dir,
     create_zip_from_bytes,
     format_size,
+    compute_file_hash,
 )
 
 # Session State for Theme
@@ -77,6 +78,23 @@ def toggle_theme():
 st.set_page_config(
     page_title="KomprezzIn", layout="centered", initial_sidebar_state="collapsed"
 )
+
+@st.cache_data(max_entries=20, show_spinner=False)
+def get_cached_compressed_file(file_hash, file_name, file_bytes, target_size):
+    """
+    Fungsi pembungkus pintar untuk caching.
+    Menggunakan hash konten sebagai key.
+    """
+    # Karena cache butuh temp_dir, kita buat dan hapus di dalam scope ini
+    temp_dir = create_temp_dir()
+    input_path = os.path.join(temp_dir, f"in_{file_name}")
+    try:
+        with open(input_path, "wb") as f:
+            f.write(file_bytes)
+
+        return process_file(temp_dir, file_name, input_path, target_size)
+    finally:
+        cleanup_temp_dir(temp_dir)
 
 @st.cache_data
 def load_css(theme: str) -> str:
@@ -348,17 +366,17 @@ if st.session_state.is_processing and st.session_state.start_processing:
                         )
                         continue
 
-                    # Simpan file secara bertahap langsung ke disk (tanpa membacanya sepenuhnya ke memori)
-                    input_path = os.path.join(temp_dir, f"in_{file.name}")
-                    with open(input_path, "wb") as f:
-                        f.write(file.getbuffer())
+                    # Ambil bytes penuh untuk hashing & caching
+                    file_bytes = file.getvalue()
+                    file_hash = compute_file_hash(file_bytes)
+                    target_size_limit = TARGET_OPTIONS[st.session_state.target_size_label]
 
                     future = executor.submit(
-                        process_file,
-                        temp_dir,
+                        get_cached_compressed_file,
+                        file_hash,
                         file.name,
-                        input_path,
-                        TARGET_OPTIONS[st.session_state.target_size_label],
+                        file_bytes,
+                        target_size_limit,
                     )
                     futures_to_file[future] = file.name
 

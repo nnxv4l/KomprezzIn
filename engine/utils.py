@@ -2,7 +2,15 @@ import os
 import shutil
 import tempfile
 import zipfile
+import hashlib
 from io import BytesIO
+
+def compute_file_hash(file_bytes):
+    """
+    Menghasilkan hash MD5 dari bytes file.
+    Digunakan untuk sistem caching.
+    """
+    return hashlib.md5(file_bytes).hexdigest()
 
 def create_temp_dir():
     return tempfile.mkdtemp()
